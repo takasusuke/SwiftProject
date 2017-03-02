@@ -32,7 +32,6 @@ class StageSelectViewController: UIViewController {
     
     // StageSelectに戻る処理
     @IBAction func backTop(seque: UIStoryboardSegue){
-        
     }
     
     // ボタン1の処理
@@ -135,14 +134,13 @@ class StageSelectViewController: UIViewController {
         SelectSeque(sender)
     }
 
-    
-    // GameへのSequeを指定するメソッド
+    // GameへのSegueを指定するメソッド
     func SelectSeque(_ sender: UIButton){
         sendStage = (receiveLevel,sender.currentTitle! as String)
         performSegue(withIdentifier: "StageSelect-to-Game", sender: sendStage)
     }
     
-    // Seque指定時の処理
+    // Segue指定時の処理
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if sender is (String,String) {
             let nextVC = segue.destination as! GameViewController

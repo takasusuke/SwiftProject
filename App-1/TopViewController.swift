@@ -25,7 +25,6 @@ class TopViewController: UIViewController {
     
     // Topに戻る処理
     @IBAction func backTop(seque: UIStoryboardSegue){
-        
     }
     
     // チュートリアルボタンの処理
