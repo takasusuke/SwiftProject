@@ -10,9 +10,14 @@ import UIKit
 
 class GameViewController: UIViewController {
 
+    // 送られてきたStageを受け取る変数
+    var receiveStage = ("","")
+    
+    @IBOutlet weak var Stage: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        Stage.text = receiveStage.0 + "-" + receiveStage.1
         // Do any additional setup after loading the view.
     }
 
