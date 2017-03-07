@@ -71,7 +71,7 @@ class GameViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    // 出現させる銃弾の種類を決定するメソッド
+    // 出現させる銃弾の種類、方向を決定するメソッド
     func setBullet() {
         // 1~100の整数１つをランダムに取得する
         var bulletNumber = (Int)(arc4random_uniform(100)) + 1
@@ -80,24 +80,22 @@ class GameViewController: UIViewController {
         var direction : String = ""
         
         // 出現させる銃弾の種類を決定する
-        for_tmp:
-            for tmp in bulletList {
+        for tmp in bulletList {
                 // 乱数値から銃弾の出現割合を順に引いていく
                 bulletNumber -= tmp.percentage
                 if (bulletNumber <= 0) {
                     bullet = tmp
-                    break for_tmp
+                    break
                 }
         }
         
         // 出現させる銃弾の方向を決定する
-        for_tmp2:
             for tmp in bulletDirection {
                 // 乱数値から銃弾の出現割合を順に引いていく
                 directionNumber -= tmp.percentage
                 if (directionNumber <= 0) {
                     direction = tmp.direction
-                    break for_tmp2
+                    break
                 }
         }
         
@@ -116,7 +114,7 @@ class GameViewController: UIViewController {
         bulletImageView.bounds.size.height = 25
         
         // 銃弾の出現する方向に応じて画像を回転させる
-        // 並びに、決めた方向のうち、どこから来るのかを決める
+        // また、決めた方向のうち、どの列から来るのかを決める
         let angle: CGFloat
         if (direction == "up") {
             angle = CGFloat((270.0 * M_PI) / 180.0)
@@ -143,18 +141,18 @@ class GameViewController: UIViewController {
         self.view.addSubview(bulletImageView)
         
         if (direction == "up") {
-            _ = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.moveUp),  userInfo: tmp, repeats: true)
+            _ = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.moveFromUp),  userInfo: tmp, repeats: true)
         } else if (direction == "down") {
-            _ = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.moveDown),  userInfo: tmp, repeats: true)
+            _ = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.moveFromDown),  userInfo: tmp, repeats: true)
         } else if (direction == "left") {
-            _ = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.moveLeft),  userInfo: tmp, repeats: true)
+            _ = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.moveFromLeft),  userInfo: tmp, repeats: true)
         } else {
-            _ = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.moveRight),  userInfo: tmp, repeats: true)
+            _ = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(self.moveFromRight),  userInfo: tmp, repeats: true)
         }
     }
     
-    // 移動メソッド(moveUp)
-    func moveUp(timer: Timer) {
+    // 移動メソッド(moveFromUp)
+    func moveFromUp(timer: Timer) {
         let tmp = timer.userInfo as! (UIImageView, CGFloat)
         let bullet = tmp.0
         let speed = tmp.1
@@ -165,12 +163,13 @@ class GameViewController: UIViewController {
         
         if (bullet.center.y > bulletHeight + (bullet.bounds.height / 2)) {
             timer.invalidate()
+            bullet.removeFromSuperview()
         }
         
     }
     
-    // 移動メソッド(moveDown)
-    func moveDown(timer: Timer) {
+    // 移動メソッド(moveFromDown)
+    func moveFromDown(timer: Timer) {
         let tmp = timer.userInfo as! (UIImageView, CGFloat)
         let bullet = tmp.0
         let speed = tmp.1
@@ -179,14 +178,15 @@ class GameViewController: UIViewController {
         
         let bulletHeight = bullet.bounds.height
         
-        if (bullet.center.y < 0 - bulletHeight) {
+        if (bullet.center.y < 0 - bulletHeight - 16) {
             timer.invalidate()
+            bullet.removeFromSuperview()
         }
         
     }
     
-    // 移動メソッド(moveLeft)
-    func moveLeft(timer: Timer) {
+    // 移動メソッド(moveFromLeft)
+    func moveFromLeft(timer: Timer) {
         let tmp = timer.userInfo as! (UIImageView, CGFloat)
         let bullet = tmp.0
         let speed = tmp.1
@@ -197,12 +197,13 @@ class GameViewController: UIViewController {
         
         if (bullet.center.x > bulletWidth + (bullet.bounds.width / 2)) {
             timer.invalidate()
+            bullet.removeFromSuperview()
         }
         
     }
     
-    // 移動メソッド(moveRight)
-    func moveRight(timer: Timer) {
+    // 移動メソッド(moveFromRight)
+    func moveFromRight(timer: Timer) {
         let tmp = timer.userInfo as! (UIImageView, CGFloat)
         let bullet = tmp.0
         let speed = tmp.1
@@ -213,6 +214,7 @@ class GameViewController: UIViewController {
         
         if (bullet.center.x < 0 - bulletWidth) {
             timer.invalidate()
+            bullet.removeFromSuperview()
         }
         
     }
