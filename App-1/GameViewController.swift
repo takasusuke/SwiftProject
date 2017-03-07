@@ -20,7 +20,8 @@ class GameViewController: UIViewController {
     var bulletDirection: [(direction: String,  percentage: Int)] = []
     
     // 銃弾出現の頻度を表す変数
-    var frequency: [Double] = []
+    // 複数の銃弾をまとめて発射する仕組みを考案中
+    var frequency: [(Int, Double)] = []
     
     @IBOutlet weak var Stage: UILabel!
     
@@ -34,7 +35,7 @@ class GameViewController: UIViewController {
             bulletList.append(("black", 5, 100))
             bulletDirection.append(("left", 50))
             bulletDirection.append(("right", 50))
-            frequency.append(2.0)
+            frequency.append((0, 2.0))
         } else if (Stage.text == "1-2") {
             bulletList.append(("black", 5, 80))
             bulletList.append(("red", 10, 20))
@@ -42,7 +43,7 @@ class GameViewController: UIViewController {
             bulletDirection.append(("right", 45))
             bulletDirection.append(("up", 5))
             bulletDirection.append(("down", 5))
-            frequency.append(2.0)
+            frequency.append((0, 2.0))
         } else if (Stage.text == "1-3") {
             bulletList.append(("black", 5, 50))
             bulletList.append(("red", 10, 50))
@@ -50,19 +51,30 @@ class GameViewController: UIViewController {
             bulletDirection.append(("right", 45))
             bulletDirection.append(("up", 5))
             bulletDirection.append(("down", 5))
-            frequency.append(2.0)
-            frequency.append(13.0)
+            frequency.append((0, 2.0))
+            frequency.append((0, 13.0))
         } else if (Stage.text == "1-4") {
             bulletList.append(("black", 5, 50))
             bulletList.append(("red", 10, 30))
             bulletList.append(("blue", 15, 20))
             bulletDirection.append(("left", 50))
             bulletDirection.append(("right", 50))
-            frequency.append(2.0)
+            frequency.append((0, 2.0))
+        } else if (Stage.text == "1-5") {
+            bulletList.append(("black", 5, 30))
+            bulletList.append(("red", 10, 30))
+            bulletList.append(("blue", 15, 20))
+            bulletList.append(("green", 10, 20))
+            bulletDirection.append(("left", 25))
+            bulletDirection.append(("right", 25))
+            bulletDirection.append(("up", 25))
+            bulletDirection.append(("down", 25))
+            frequency.append((0, 6.0))
+            frequency.append((0, 6.0))
         }
         
         for second in frequency {
-            _ = Timer.scheduledTimer(timeInterval: second, target: self, selector: #selector(self.setBullet), userInfo: nil, repeats: true)
+            _ = Timer.scheduledTimer(timeInterval: second.1, target: self, selector: #selector(self.setBullet), userInfo: nil, repeats: true)
         }
     }
     
@@ -132,8 +144,6 @@ class GameViewController: UIViewController {
         }
         
         bulletImageView.transform = CGAffineTransform(rotationAngle: angle)
-        
-        // bulletImageView.image = bulletImage
         
         let tmp = (bulletImageView, speed)
         
